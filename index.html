@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Império - Comunidade Roblox</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Whitney:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset e configurações gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        :root {
+            --black-1: #0a0a0a;
+            --black-2: #111111;
+            --black-3: #1a1a1a;
+            --black-4: #222222;
+            --yellow-1: #ffcc00;
+            --yellow-2: #e6b800;
+            --yellow-3: #ffdd33;
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #888888;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 20px;
+            --border-radius-xl: 28px;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 13px;
+            }
+        }
+
+        body {
+            background-color: var(--black-1);
+            color: var(--text-primary);
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            width: 100%;
+            padding-bottom: 100px; /* Espaço para a foto flutuante */
+        }
+
+        /* Container responsivo */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.75rem;
+            }
+        }
+
+        /* Tela de Carregamento */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--black-1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-content {
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .loading-icon {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--yellow-1);
+            margin-bottom: 1.5rem;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .loading-text {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .loading-bar {
+            width: 100%;
+            max-width: 300px;
+            height: 4px;
+            background-color: var(--black-3);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background-color: var(--yellow-1);
+            border-radius: 2px;
+            transition: width 2s ease;
+        }
+
+        .loading-screen.active .loading-progress {
+            width: 100%;
+        }
+
+        /* Foto de Perfil Flutuante - CANTO INFERIOR DIREITO */
+        .profile-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all var(--transition-normal);
+        }
+
+        @media (max-width: 768px) {
+            .profile-float {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-float {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+
+        .profile-image-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--yellow-1);
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .profile-image-container {
+                width: 70px;
+                height: 70px;
+                border-width: 2px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-image-container {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        .profile-image-container:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(255, 204, 0, 0.4);
+            border-color: var(--yellow-2);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-normal);
+        }
+
+        .profile-image-container:hover .profile-image {
+            transform: scale(1.1);
+        }
+
+        .profile-label {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            background-color: rgba(10, 10, 10, 0.8);
+            padding: 4px 8px;
+            border-radius: var(--border-radius-sm);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all var(--transition-normal);
+            white-space: nowrap;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .profile-image-container:hover + .profile-label,
+        .profile-label:hover {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal para ver a foto ampliada */
+        .profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            padding: 20px;
+        }
+
+        .profile-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+            border: 3px solid var(--yellow-1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color var(--transition-fast);
+            padding: 5px;
+        }
+
+        .close-modal:hover {
+            color: var(--yellow-1);
+        }
+
+        .modal-caption {
+            text-align: center;
+            color: var(--text-primary);
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Header e Navegação */
+        header {
+            background-color: var(--black-2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 0.75rem 0;
+            transition: all var(--transition-normal);
+            border-bottom: 1px solid var(--black-4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+            box-shadow: var(--shadow-md);
+            padding: 0.5rem 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 800;
+            color: var(--yellow-1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            animation: float 3s ease-in-out infinite;
+            font-size: 1.2em;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: clamp(1rem, 3vw, 2rem);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+        }
+
+        nav ul li a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            transition: color var(--transition-fast);
+            position: relative;
+            padding: 0.25rem 0;
+        }
+
+        nav ul li a:hover {
+            color: var(--yellow-1);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--yellow-1);
+            transition: width var(--transition-normal);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .nav-button {
+            background-color: var(--yellow-1);
+            color: var(--black-1);
+            border: none;
+            padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+
+        .nav-button:hover {
+            background-color: var(--yellow-2);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* NOVO: Botão Ver Admins no Header */
+        .nav-button-admin {
+            background-color: var(--black-3);
+            color: var(--text-primary);
+            border: 1px solid var(--black-4);
+            padding: clamp(0.5rem, 2vw, 0.625rem) clamp(0.75rem, 3vw, 1rem);
+            border-radius: var(--border-radius-lg);
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            white-space: nowrap;
+            margin-left: 0.5rem;
+        }
+
+        .nav-button-admin:hover {
+            background-color: var(--black-4);
+            transform: translateY(-2px);
+            border-color: var(--yellow-1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform var(--transition-fast);
+            color: var(--text-primary);
+            background: none;
+            border: none;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        .mobile-menu:hover {
+            transform: scale(1.1);
+            color: var(--yellow-1);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background-color: var(--black-2);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all var(--transition-normal);
+            z-index: 999;
+            border-bottom: 1px solid var(--black-4);
+        }
+
+        .mobile-nav.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav ul li a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.75rem;
+            display: block;
+            border-radius: var(--border-radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .mobile-nav ul li a:hover {
+            background-color: var(--black-3);
+            color: var(--yellow-1);
+            padding-left: 1.25rem;
+        }
+
+        /* Seção Hero */
+        .hero {
+            background: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.95));
+            padding: clamp(8rem, 15vw, 10rem) 0 clamp(4rem, 8vw, 6rem);
+            position: relative;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                margin-top: 50px;
+                padding: clamp(6rem, 12vw, 8rem) 0 clamp(3rem, 6vw, 4rem);
+            }
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 204, 0, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 204, 0, 0.04) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: clamp(1rem, 3vw, 1.5rem);
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .button-primary, .button-secondary, .button-admin-hero {
+            padding: clamp(0.875rem, 2.5vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+            border-radius: var(--border-radius-xl);
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 200px;
+            text-align: center;
+            border: none;
+        }
+
+        @media (max-width: 480px) {
+            .button-primary, .button-secondary, .button-admin-hero {
+                min-width: 100%;
+                width: 100%;
+            }
+        }
+
+        .button-primary {
+            background-color: var(--yellow-1);
+            color: var(--black-1);
+        }
+
+        .button-primary:hover {
+            background-color: var(--yellow-2);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .button-secondary {
+            background-color: var(--black-3);
+            color: var(--text-primary);
+            border: 1px solid var(--black-4);
+        }
+
+        .button-secondary:hover {
+            background-color: var(--black-4);
+            transform: translateY(-3px);
+            border-color: var(--yellow-1);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* NOVO: Botão Ver Admins na Seção Hero */
+        .button-admin-hero {
+            background-color: var(--black-3);
+            color: var(--text-primary);
+            border: 1px solid var(--black-4);
+        }
+
+        .button-admin-hero:hover {
+            background-color: var(--black-4);
+            transform: translateY(-3px);
+            border-color: var(--yellow-1);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* NOVO: Balão/Tópico dos Admins */
+        .admins-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background-color: var(--black-2);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--yellow-1);
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 450px;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .admins-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .admins-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--black-4);
+        }
+
+        .admins-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--yellow-1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-admins {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color var(--transition-fast);
+            padding: 0.25rem;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-admins:hover {
+            color: var(--yellow-1);
+            background-color: var(--black-3);
+        }
+
+        .admins-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .admin-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--black-3);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--black-4);
+            transition: all var(--transition-normal);
+        }
+
+        .admin-item:hover {
+            background-color: var(--black-4);
+            transform: translateX(5px);
+            border-color: var(--yellow-1);
+        }
+
+        .admin-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--yellow-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--black-1);
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .admin-info {
+            flex: 1;
+        }
+
+        .admin-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .admin-username {
+            color: var(--yellow-1);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .admin-username i {
+            font-size: 0.8rem;
+        }
+
+        /* Overlay para o balão de admins */
+        .admins-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        .admins-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Seções de Conteúdo */
+        section {
+            padding: clamp(3rem, 8vw, 5rem) 0;
+            position: relative;
+        }
+
+        .section-light {
+            background-color: var(--black-2);
+            border-top: 1px solid var(--black-4);
+            border-bottom: 1px solid var(--black-4);
+        }
+
+        .section-dark {
+            background-color: var(--black-1);
+        }
+
+        .section-content {
+            display: flex;
+            align-items: center;
+            gap: clamp(2rem, 5vw, 4rem);
+        }
+
+        @media (max-width: 768px) {
+            .section-content {
+                flex-direction: column;
+                gap: 3rem;
+            }
+            
+            .section-content.reverse-on-mobile {
+                flex-direction: column-reverse;
+            }
+        }
+
+        .section-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .section-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .section-image-placeholder {
+            width: 100%;
+            height: clamp(250px, 40vw, 350px);
+            border-radius: var(--border-radius-md);
+            background: linear-gradient(135deg, var(--black-3), var(--black-4));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--yellow-1);
+            font-size: clamp(3rem, 8vw, 5rem);
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-normal);
+            border: 1px solid var(--black-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .section-image-placeholder:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 204, 0, 0.2);
+        }
+
+        .section-image-placeholder:hover::before {
+            opacity: 1;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .section-desc {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Seção de Comunidade */
+        .community-section {
+            text-align: center;
+            padding: clamp(4rem, 8vw, 6rem) 0;
+            background-color: var(--black-3);
+            border-top: 1px solid var(--black-4);
+            border-bottom: 1px solid var(--black-4);
+            position: relative;
+        }
+
+        .community-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 204, 0, 0.05) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .community-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .community-desc {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Seção de Redes Sociais */
+        .social-section {
+            background-color: var(--black-2);
+            text-align: center;
+            padding: clamp(3rem, 6vw, 5rem) 0;
+            border-top: 1px solid var(--black-4);
+        }
+
+        .social-title {
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .social-icons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 480px) {
+            .social-icons {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+        }
+
+        .social-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all var(--transition-normal);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-md);
+            background-color: var(--black-3);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--black-4);
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-8px);
+            color: var(--yellow-1);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--yellow-1);
+        }
+
+        .social-icon i {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            margin-bottom: 1rem;
+            transition: all var(--transition-normal);
+        }
+
+        .social-icon:hover i {
+            transform: scale(1.2);
+        }
+
+        .social-icon span {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: all var(--transition-normal);
+        }
+
+        .social-icon small {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            transition: color var(--transition-normal);
+        }
+
+        .social-icon:hover small {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--black-1);
+            padding: clamp(2rem, 5vw, 3rem) 0 1.5rem;
+            border-top: 1px solid var(--black-4);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: clamp(1.5rem, 3vw, 2.5rem);
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .footer-column {
+            min-width: 0;
+        }
+
+        .footer-title {
+            color: var(--yellow-1);
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--yellow-1);
+        }
+
+        .footer-links i {
+            color: var(--yellow-1);
+            width: 20px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--black-4);
+            padding-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+            }
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--yellow-1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-logo {
+                justify-content: flex-start;
+            }
+        }
+
+        .footer-logo .logo-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .copyright {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* Utilitários */
+        .fade-in {
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Prevenir quebra de layout em telas muito pequenas */
+        @media (max-width: 360px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .button-primary, .button-secondary, .button-admin-hero {
+                padding: 0.75rem 1rem;
+            }
+            
+            .section-image-placeholder {
+                height: 200px;
+            }
+            
+            .profile-image-container {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .admins-panel {
+                padding: 1rem;
+            }
+        }
+
+        /* Otimização para telas muito grandes */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1600px;
+            }
+            
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .section-title {
+                font-size: 3rem;
+            }
+            
+            .profile-image-container {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Carregamento -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="loading-text">Bem-vindo ao Império</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO: Balão/Tópico dos Admins -->
+    <div class="admins-overlay" id="adminsOverlay"></div>
+    <div class="admins-panel" id="adminsPanel">
+        <div class="admins-header">
+            <h3 class="admins-title">
+                <i class="fas fa-user-shield"></i>
+                Administradores do Império
+            </h3>
+            <button class="close-admins" id="closeAdmins">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="admins-list">
+            <div class="admin-item">
+                <div class="admin-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name">Líder/Fundador</div>
+                    <div class="admin-username">
+                        <i class="fas fa-at"></i>
+                        s2_anj,  
+                        bielzzkkj2
+                    </div>
+                </div>
+            </div>
+            <div class="admin-item">
+                <div class="admin-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name">Administrador Sênior</div>
+                    <div class="admin-username">
+                        <i class="fas fa-at"></i>
+                        bielzzkkj2
+                    </div>
+                </div>
+            </div>
+            <div class="admin-item">
+                <div class="admin-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name">Administrador</div>
+                    <div class="admin-username">
+                        <i class="fas fa-at"></i>
+                        Pipss92,
+                        Sosohzinha30,
+                        Poxaa.zulmi,
+                        eu_sufista,
+                        bacon_846065,
+                        jvitor352,
+                        lira.zxs,
+                        jhenifer_174,
+                        knzyy.5,
+                        limaa_sillva,
+                        drarx_1
+                    </div>
+                </div>
+            </div>
+            <div class="admin-item">
+                <div class="admin-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name">Moderador Chefe</div>
+                    <div class="admin-username">
+                        <i class="fas fa-at"></i>
+                        Poxaa.zulmi
+                    </div>
+                </div>
+            </div>
+            <div class="admin-item">
+                <div class="admin-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name">Gerente de Eventos</div>
+                    <div class="admin-username">
+                        <i class="fas fa-at"></i>
+                        eu_sufista
+                        Pipss92
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Foto de Perfil Flutuante - CANTO INFERIOR DIREITO -->
+    <div class="profile-float" id="profileFloat">
+        <div class="profile-image-container" id="profileImage">
+            <img src="https://i.ibb.co/zT06gSGY/imperio-foto.jpg" alt="Foto de Perfil Império" class="profile-image">
+        </div>
+        <div class="profile-label">Foto do Perfil</div>
+    </div>
+
+    <!-- Modal para ver a foto ampliada -->
+    <div class="profile-modal" id="profileModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <img src="https://i.ibb.co/zT06gSGY/imperio-foto.jpg" alt="Foto de Perfil Império Ampliada" class="modal-image">
+            <div class="modal-caption">Foto do Perfil - Comunidade Império</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#home" class="logo">
+                <i class="fas fa-crown logo-icon"></i>
+                Império
+            </a>
+            
+            <button class="mobile-menu" id="mobileMenuBtn" aria-label="Abrir menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#mission">Conteúdo</a></li>
+                    <li><a href="#social">Redes Sociais</a></li>
+                    <li><a href="#community">Comunidade</a></li>
+                </ul>
+            </nav>
+            
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="nav-button" id="navButton">Entrar no Império</button>
+                <!-- NOVO: Botão Ver Admins no Header -->
+                <button class="nav-button-admin" id="navButtonAdmin">
+                    Ver Admins
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Mobile -->
+    <div class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#home">Início</a></li>
+            <li><a href="#about">Sobre</a></li>
+            <li><a href="#mission">Conteúdo</a></li>
+            <li><a href="#social">Redes Sociais</a></li>
+            <li><a href="#community">Comunidade</a></li>
+            <li><a href="#" id="mobileAdminsLink">Ver Admins</a></li>
+        </ul>
+    </div>
+
+    <!-- Seção Hero -->
+    <section id="home" class="hero">
+        <div class="container hero-content fade-in">
+            <h1>Bem-vindo ao Império</h1>
+            <p>A maior comunidade de Roblox do Brasil! Somos um família unido que cria conteúdos incríveis para o TikTok, organiza eventos épicos no Roblox e mantém uma família ativa no Discord, Instagram e WhatsApp.</p>
+            <p>Junte-se a nós e faça parte do nosso império!</p>
+            <div class="hero-buttons">
+                <button class="button-primary" id="joinCommunity">
+                    <i class="fas fa-users"></i>
+                    Entrar para o Império
+                </button>
+                <button class="button-secondary" id="learnMore">
+                    Conhecer Mais
+                </button>
+                <!-- NOVO: Botão Ver Admins na seção Hero -->
+                <button class="button-admin-hero" id="heroAdminsButton">
+                    <i class="fas fa-user-shield"></i>
+                    Ver Admins
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Sobre -->
+    <section id="about" class="section-light">
+        <div class="container">
+            <div class="section-content reverse-on-mobile">
+                <div class="section-image fade-in">
+                    <div class="section-image-placeholder">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div>
+                <div class="section-text fade-in">
+                    <h2 class="section-title">O que é o Império?</h2>
+                    <p class="section-desc">O Império é mais do que uma simples família do Roblox - somos uma família unida por paixão por jogos, criação de conteúdo e diversão. Nossa comunidade começou pequena, mas com dedicação e trabalho em equipe, crescemos para nos tornarmos uma das comunidades mais respeitadas do Roblox brasileiro.</p>
+                    <p class="section-desc">Nosso foco está na criação de conteúdos divertidos e envolventes para o TikTok, onde compartilhamos nossas melhores jogadas, momentos engraçados e dicas para outros jogadores.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Conteúdo -->
+    <section id="mission" class="section-dark">
+        <div class="container">
+            <div class="section-content">
+                <div class="section-text fade-in">
+                    <h2 class="section-title">Nossa Produção de Conteúdo</h2>
+                    <p class="section-desc">Além de criar conteúdo para o TikTok, organizamos eventos exclusivos para membros, batalhas épicas entre clãs e sessões de gameplay colaborativas. Temos um ambiente acolhedor no Discord, atualizações diárias no Instagram e um grupo familiar no WhatsApp para comunicação direta entre membros.</p>
+                    <p class="section-desc">Nossos vídeos no TikTok são produzidos com qualidade e criatividade, sempre buscando trazer entretenimento e diversão para nossa comunidade e para todos os fãs de Roblox.</p>
+                </div>
+                <div class="section-image fade-in">
+                    <div class="section-image-placeholder">
+                        <i class="fas fa-video"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Comunidade -->
+    <section id="community" class="section-light">
+        <div class="container">
+            <div class="section-content reverse-on-mobile">
+                <div class="section-image fade-in">
+                    <div class="section-image-placeholder">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                </div>
+                <div class="section-text fade-in">
+                    <h2 class="section-title">Nossa Comunidade no Roblox</h2>
+                    <p class="section-desc">Estabelecemos uma comunidade forte dentro do Roblox, onde membros podem colaborar, compartilhar estratégias e participar de eventos exclusivos. Nossos servidores são organizados para proporcionar a melhor experiência para todos os membros.</p>
+                    <p class="section-desc">Com ferramentas de moderação e organização, criamos um ambiente seguro e divertido onde todos podem crescer juntos como parte do Império.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Final -->
+    <!-- Seção Final --> 
+<section class="community-section">
+    <div class="container">
+        <h2 class="community-title">UMA COMUNIDADE UNIDA PELA PAIXÃO</h2>
+        <p class="community-desc">No Império, valorizamos cada membro como parte fundamental da nossa família. Aqui você encontra amigos, diversão e muito conteúdo de qualidade sobre Roblox. Junte-se a nós e faça parte desta família!</p>
+        <div class="section-image fade-in">
+            <div class="community-photo-container" style="max-width: 800px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3); border: 3px solid #ffcc00;">
+                <!-- COLE O LINK DA SUA FOTO AQUI DENTRO DAS ASPAS -->
+                <img src="imp7.jpg" 
+                     alt="Comunidade Império unida" 
+                     style="width: 100%; height: auto; display: block; transition: transform 0.5s ease;">
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Seção de Redes Sociais -->
+    <section id="social" class="social-section">
+        <div class="container">
+            <h2 class="social-title">Nossas Redes Sociais</h2>
+            <p class="community-desc">Conecte-se conosco em todas as nossas plataformas e faça parte da família Império!</p>
+            <div class="social-icons">
+                <div class="social-icon" id="tiktokButton">
+                    <i class="fab fa-tiktok"></i>
+                    <span>TikTok</span>
+                    <small>Conteúdos diários</small>
+                </div>
+                <div class="social-icon" id="discordButton">
+                    <i class="fab fa-discord"></i>
+                    <span>Discord</span>
+                    <small>Comunidade ativa</small>
+                </div>
+                <div class="social-icon" id="instagramButton">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                    <small>Fotos e atualizações</small>
+                </div>
+                <div class="social-icon" id="whatsappButton">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                    <small>Grupo da família</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-crown"></i>
+                        Império
+                    </h3>
+                    <p style="color: var(--text-secondary);">Uma das maior comunidade de Roblox do Brasil. Junte-se a nós e faça parte do nosso império!</p>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#about">Sobre Nós</a></li>
+                        <li><a href="#social">Redes Sociais</a></li>
+                        <li><a href="#community">Comunidade</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">Entre em Contato</h3>
+                    <ul class="footer-links">
+                        <li><i class="fab fa-tiktok"></i><a href="#">TikTok: @imperioroblox</a></li>
+                        <li><i class="fab fa-discord"></i><a href="#">Discord: Império Oficial</a></li>
+                        <li><i class="fab fa-roblox"></i><a href="#">Roblox: @ImperioClan</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-logo">
+                    <i class="fas fa-crown logo-icon"></i>
+                    Império
+                </div>
+                <p class="copyright">&copy; 2025 Império - Comunidade Roblox. Todos os direitos reservados.<br>Esta comunidade não é afiliada à Roblox Corporation.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // URLs para redirecionamento - ATUALIZADO COM OS LINKS QUE VOCÊ ENVIOU
+    const DISCORD_URL = '#';
+    const TIKTOK_URL = 'https://www.tiktok.com/@imperiogg8?is_from_webapp=1&sender_device=pc';
+    const INSTAGRAM_URL = 'https://ig.me/j/AbbSxvycMTnzzbOC/';
+    const WHATSAPP_URL = '#';
+
+    // Elementos DOM
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingText = document.querySelector('.loading-text'); // Elemento para mudar o texto
+    const joinCommunityBtn = document.getElementById('joinCommunity');
+    const learnMoreBtn = document.getElementById('learnMore');
+    const tiktokButton = document.getElementById('tiktokButton');
+    const discordButton = document.getElementById('discordButton');
+    const instagramButton = document.getElementById('instagramButton');
+    const whatsappButton = document.getElementById('whatsappButton');
+    const navButton = document.getElementById('navButton');
+    
+    // NOVO: Elementos para o botão "Ver Admins"
+    const navButtonAdmin = document.getElementById('navButtonAdmin');
+    const heroAdminsButton = document.getElementById('heroAdminsButton');
+    const mobileAdminsLink = document.getElementById('mobileAdminsLink');
+    const adminsPanel = document.getElementById('adminsPanel');
+    const adminsOverlay = document.getElementById('adminsOverlay');
+    const closeAdmins = document.getElementById('closeAdmins');
+    
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const header = document.getElementById('header');
+    
+    // Elementos para a foto de perfil
+    const profileImage = document.getElementById('profileImage');
+    const profileModal = document.getElementById('profileModal');
+    const closeModal = document.getElementById('closeModal');
+
+    // Função para abrir/fechar o painel de admins
+    function toggleAdminsPanel(show) {
+        if (show) {
+            adminsPanel.classList.add('active');
+            adminsOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        } else {
+            adminsPanel.classList.remove('active');
+            adminsOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Fechar menu mobile se estiver aberto
+            mobileNav.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    }
+
+    // Função para redirecionamento COM MENSAGENS ESPECÍFICAS
+    function redirectWithLoading(url, platform, customMessage = null) {
+        if(url === '#') {
+            alert(`Em breve: Link do ${platform} será adicionado aqui!`);
+            return;
+        }
+        
+        // Mudar o texto da tela de carregamento conforme a plataforma
+        if (customMessage) {
+            loadingText.textContent = customMessage;
+        } else if (platform === 'Discord') {
+            loadingText.textContent = 'Entrando no Discord...';
+        } else if (platform === 'TikTok') {
+            loadingText.textContent = 'Indo para o TikTok...';
+        } else if (platform === 'Instagram') {
+            loadingText.textContent = 'Indo para o Instagram...';
+        } else if (platform === 'WhatsApp') {
+            loadingText.textContent = 'Entrando no WhatsApp...';
+        } else {
+            loadingText.textContent = 'Redirecionando...';
+        }
+        
+        // Mostrar tela de carregamento
+        loadingScreen.classList.add('active');
+        
+        // Redirecionar após 2 segundos
+        setTimeout(() => {
+            window.open(url, '_blank');
+            
+            // Esconder tela de carregamento e restaurar texto padrão
+            setTimeout(() => {
+                loadingScreen.classList.remove('active');
+                loadingText.textContent = 'Bem-vindo ao Império'; // Volta ao texto original
+            }, 1000);
+        }, 2000);
+    }
+
+    // Event Listeners para os botões
+    joinCommunityBtn.addEventListener('click', () => {
+        redirectWithLoading(DISCORD_URL, 'Discord', 'Entrando no Império...');
+    });
+
+    learnMoreBtn.addEventListener('click', () => {
+        // Rolagem suave para a seção "Sobre"
+        document.querySelector('#about').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+
+    // NOVO: Event Listeners para botões "Ver Admins"
+    navButtonAdmin.addEventListener('click', () => {
+        toggleAdminsPanel(true);
+    });
+
+    heroAdminsButton.addEventListener('click', () => {
+        toggleAdminsPanel(true);
+    });
+
+    mobileAdminsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleAdminsPanel(true);
+    });
+
+    closeAdmins.addEventListener('click', () => {
+        toggleAdminsPanel(false);
+    });
+
+    adminsOverlay.addEventListener('click', () => {
+        toggleAdminsPanel(false);
+    });
+
+    // Fechar painel de admins com tecla ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && adminsPanel.classList.contains('active')) {
+            toggleAdminsPanel(false);
+        }
+    });
+
+    // Event Listeners para redes sociais - COM MENSAGENS ESPECÍFICAS
+    tiktokButton.addEventListener('click', () => {
+        redirectWithLoading(TIKTOK_URL, 'TikTok', 'Indo para o TikTok...');
+    });
+
+    discordButton.addEventListener('click', () => {
+        redirectWithLoading(DISCORD_URL, 'Discord', 'Entrando no Discord...');
+    });
+
+    instagramButton.addEventListener('click', () => {
+        redirectWithLoading(INSTAGRAM_URL, 'Instagram', 'Indo para o Instagram...');
+    });
+
+    whatsappButton.addEventListener('click', () => {
+        redirectWithLoading(WHATSAPP_URL, 'WhatsApp', 'Entrando no WhatsApp...');
+    });
+
+    navButton.addEventListener('click', () => {
+        redirectWithLoading(DISCORD_URL, 'Discord', 'Entrando no Império...');
+    });
+
+    // Funcionalidade da foto de perfil
+    profileImage.addEventListener('click', () => {
+        profileModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Previne scroll do body
+    });
+
+    closeModal.addEventListener('click', () => {
+        profileModal.classList.remove('active');
+        document.body.style.overflow = 'auto'; // Restaura scroll do body
+    });
+
+    // Fechar modal clicando fora da imagem
+    profileModal.addEventListener('click', (e) => {
+        if (e.target === profileModal) {
+            profileModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Fechar modal com tecla ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && profileModal.classList.contains('active')) {
+            profileModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Menu Mobile
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileNav.classList.toggle('active');
+        mobileMenuBtn.innerHTML = mobileNav.classList.contains('active') 
+            ? '<i class="fas fa-times"></i>' 
+            : '<i class="fas fa-bars"></i>';
+    });
+
+    // Fechar menu ao clicar em um link mobile
+    mobileNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+    });
+
+    // Animação de scroll suave para links internos
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if(targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if(targetElement) {
+                const headerHeight = header.offsetHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Observer para animações
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+
+    // Observar elementos para animação
+    document.querySelectorAll('.section-text, .section-image').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Inicializar
+    window.addEventListener('load', function() {
+        // Mostrar tela de carregamento inicial
+        loadingScreen.classList.add('active');
+        setTimeout(() => {
+            loadingScreen.classList.remove('active');
+        }, 2000);
+    });
+
+    // Prevenir comportamento padrão em toques
+    document.addEventListener('touchstart', function() {}, {passive: true});
+</script>
+</body>
+</html>
